@@ -308,6 +308,28 @@
             margin-left: 0.5rem;
         }
         
+        .input-tab {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            background: #f8f9fa;
+            color: #495057;
+            cursor: pointer;
+            border-radius: 8px 8px 0 0;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+        
+        .input-tab.active {
+            background: #004aad;
+            color: #fff;
+            border-bottom: 3px solid #004aad;
+        }
+        
+        .input-tab:hover:not(.active) {
+            background: #e9ecef;
+        }
+        
         @media (max-width: 768px) {
             main {
                 flex-direction: column;
@@ -378,53 +400,98 @@
 
         <div id="tabKelola" class="tab-content">
             <div class="card">
-                <h2>📝 Tambah Data Siswa Baru</h2>
-                <form id="formTambahSiswa">
-                    <input type="text" id="nama" placeholder="Nama Lengkap Siswa" required>
-                    <input type="text" id="nisn" placeholder="NISN (10 digit)" maxlength="10" pattern="[0-9]{10}" required>
-                    <select id="kelas" required>
-                        <option value="">Pilih Kelas</option>
-                        <option>X-1</option>
-                        <option>X-2</option>
-                        <option>X-3</option>
-                        <option>X-4</option>
-                        <option>X-5</option>
-                        <option>X-6</option>
-                        <option>X-7</option>
-                        <option>X-8</option>
-                        <option>X-9</option>
-                        <option>X-10</option>
-                        <option>X-11</option>
-                        <option>X-12</option>
-                        <option>XI-1</option>
-                        <option>XI-2</option>
-                        <option>XI-3</option>
-                        <option>XI-4</option>
-                        <option>XI-5</option>
-                        <option>XI-6</option>
-                        <option>XI-7</option>
-                        <option>XI-8</option>
-                        <option>XI-9</option>
-                        <option>XI-10</option>
-                        <option>XI-11</option>
-                        <option>XI-12</option>
-                        <option>XII-1</option>
-                        <option>XII-2</option>
-                        <option>XII-3</option>
-                        <option>XII-4</option>
-                        <option>XII-5</option>
-                        <option>XII-6</option>
-                        <option>XII-7</option>
-                        <option>XII-8</option>
-                        <option>XII-9</option>
-                        <option>XII-10</option>
-                        <option>XII-11</option>
-                        <option>XII-12</option>
-                    </select>
-                    <input type="password" id="password" placeholder="Password Login untuk Orang Tua" required>
-                    <input type="url" id="linkNilai" placeholder="Link Halaman Nilai (https://...)" required>
-                    <button type="submit">➕ Tambah Siswa</button>
-                </form>
+                <h2>📝 Tambah Data Siswa</h2>
+                
+                <!-- Tab switcher for input methods -->
+                <div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; border-bottom: 2px solid #e9ecef;">
+                    <button id="tabManual" class="input-tab active" onclick="switchInputTab('manual')">
+                        ✏️ Input Manual
+                    </button>
+                    <button id="tabFile" class="input-tab" onclick="switchInputTab('file')">
+                        📁 Import File
+                    </button>
+                </div>
+                
+                <!-- Manual input form -->
+                <div id="inputManual">
+                    <h3>📝 Tambah Siswa Satu per Satu</h3>
+                    <form id="formTambahSiswa">
+                        <input type="text" id="nama" placeholder="Nama Lengkap Siswa" required>
+                        <input type="text" id="nisn" placeholder="NISN (10 digit)" maxlength="10" pattern="[0-9]{10}" required>
+                        <select id="kelas" required>
+                            <option value="">Pilih Kelas</option>
+                            <option>X-1</option>
+                            <option>X-2</option>
+                            <option>X-3</option>
+                            <option>X-4</option>
+                            <option>X-5</option>
+                            <option>X-6</option>
+                            <option>X-7</option>
+                            <option>X-8</option>
+                            <option>X-9</option>
+                            <option>X-10</option>
+                            <option>X-11</option>
+                            <option>X-12</option>
+                            <option>XI-1</option>
+                            <option>XI-2</option>
+                            <option>XI-3</option>
+                            <option>XI-4</option>
+                            <option>XI-5</option>
+                            <option>XI-6</option>
+                            <option>XI-7</option>
+                            <option>XI-8</option>
+                            <option>XI-9</option>
+                            <option>XI-10</option>
+                            <option>XI-11</option>
+                            <option>XI-12</option>
+                            <option>XII-1</option>
+                            <option>XII-2</option>
+                            <option>XII-3</option>
+                            <option>XII-4</option>
+                            <option>XII-5</option>
+                            <option>XII-6</option>
+                            <option>XII-7</option>
+                            <option>XII-8</option>
+                            <option>XII-9</option>
+                            <option>XII-10</option>
+                            <option>XII-11</option>
+                            <option>XII-12</option>
+                        </select>
+                        <input type="password" id="password" placeholder="Password Login untuk Orang Tua" required>
+                        <input type="url" id="linkNilai" placeholder="Link Halaman Nilai (https://...)" required>
+                        <button type="submit">➕ Tambah Siswa</button>
+                    </form>
+                </div>
+                
+                <!-- File import form -->
+                <div id="inputFile" class="hidden">
+                    <h3>📁 Import Data dari File</h3>
+                    <p style="color: #666; margin-bottom: 1rem;">
+                        Upload file CSV atau Excel dengan format: Nama, NISN, Kelas, Password, Link Nilai
+                    </p>
+                    
+                    <form id="formImportFile">
+                        <input type="file" id="fileInput" accept=".csv,.xlsx,.xls" required 
+                               style="margin-bottom: 1rem; padding: 0.8rem; border: 2px dashed #dee2e6; 
+                                      border-radius: 8px; width: 100%; max-width: 400px; background: #f8f9fa;">
+                        <button type="submit">📤 Import Data Siswa</button>
+                    </form>
+                    
+                    <div style="margin-top: 1.5rem; padding: 1rem; background: #e3f2fd; border-radius: 8px; border-left: 4px solid #2196f3;">
+                        <h4 style="margin: 0 0 0.5rem 0; color: #1976d2;">💡 Format File:</h4>
+                        <p style="margin: 0.5rem 0; font-size: 0.9rem; color: #1565c0;">
+                            <strong>CSV:</strong> Nama,NISN,Kelas,Password,LinkNilai<br>
+                            <strong>Contoh:</strong> Ahmad Budi,1234567890,X-1,password123,https://nilai.com/ahmad
+                        </p>
+                        <button onclick="downloadTemplate()" 
+                                style="background: #28a745; color: white; border: none; padding: 0.5rem 1rem; 
+                                       border-radius: 4px; cursor: pointer; margin-top: 0.5rem;">
+                            📥 Download Template CSV
+                        </button>
+                    </div>
+                    
+                    <div id="importResult" style="margin-top: 1rem;"></div>
+                </div>
             </div>
 
             <div class="card">
@@ -721,11 +788,18 @@
                         <p><strong>NISN:</strong> ${siswa.nisn}</p>
                         <p><strong>Kelas:</strong> ${siswa.kelas}</p>
                         <hr style="margin: 1rem 0;">
-                        <a href="${siswa.linkNilai}" target="_blank" rel="noopener noreferrer" 
-                           style="display: inline-block; background: #28a745; color: white; padding: 0.8rem 1.5rem; 
-                                  text-decoration: none; border-radius: 8px; margin-top: 1rem;">
-                            📊 Lihat Nilai Siswa
-                        </a>
+                        <div style="display: flex; gap: 1rem; margin-top: 1rem; flex-wrap: wrap;">
+                            <a href="${siswa.linkNilai}" target="_blank" rel="noopener noreferrer" 
+                               style="display: inline-block; background: #28a745; color: white; padding: 0.8rem 1.5rem; 
+                                      text-decoration: none; border-radius: 8px;">
+                                📊 Lihat Nilai Siswa
+                            </a>
+                            <button onclick="showChangePassword('${siswa.nisn}')" 
+                                    style="background: #ffc107; color: #000; padding: 0.8rem 1.5rem; border: none; 
+                                           border-radius: 8px; cursor: pointer; font-weight: 600;">
+                                🔑 Ganti Password
+                            </button>
+                        </div>
                     </div>
                 `;
                 formLogin.reset();
@@ -859,6 +933,114 @@
             }
         }
 
+        // Show change password modal
+        function showChangePassword(nisn) {
+            const siswa = dataSiswa.find(s => s.nisn === nisn);
+            
+            const modal = document.createElement('div');
+            modal.className = 'modal';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <h3>🔑 Ganti Password</h3>
+                    <p><strong>Siswa:</strong> ${siswa.nama} (${siswa.kelas})</p>
+                    <p><strong>NISN:</strong> ${siswa.nisn}</p>
+                    
+                    <form id="formGantiPassword" style="padding: 0; box-shadow: none; margin: 0;">
+                        <input type="password" id="passwordLama" placeholder="Password Lama" required 
+                               style="max-width: 100%; margin: 0.5rem 0;">
+                        <input type="password" id="passwordBaru" placeholder="Password Baru" required 
+                               style="max-width: 100%; margin: 0.5rem 0;">
+                        <input type="password" id="konfirmasiPassword" placeholder="Konfirmasi Password Baru" required 
+                               style="max-width: 100%; margin: 0.5rem 0;">
+                        
+                        <div style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+                            <button type="submit" style="background: #28a745; color: white; border: none; 
+                                                         padding: 0.8rem 1.5rem; border-radius: 4px; cursor: pointer; flex: 1;">
+                                🔄 Ganti Password
+                            </button>
+                            <button type="button" onclick="closeModal()" 
+                                    style="background: #6c757d; color: white; border: none; 
+                                           padding: 0.8rem 1.5rem; border-radius: 4px; cursor: pointer;">
+                                Batal
+                            </button>
+                        </div>
+                    </form>
+                    
+                    <div id="changePasswordResult" style="margin-top: 1rem;"></div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Handle form submission
+            document.getElementById('formGantiPassword').addEventListener('submit', e => {
+                e.preventDefault();
+                changePassword(nisn);
+            });
+        }
+
+        // Change password function
+        function changePassword(nisn) {
+            const passwordLama = document.getElementById('passwordLama').value;
+            const passwordBaru = document.getElementById('passwordBaru').value;
+            const konfirmasiPassword = document.getElementById('konfirmasiPassword').value;
+            
+            const siswa = dataSiswa.find(s => s.nisn === nisn);
+            const resultDiv = document.getElementById('changePasswordResult');
+            
+            // Validate old password
+            if (passwordLama !== siswa.password) {
+                resultDiv.innerHTML = `
+                    <div class="alert alert-error">
+                        <strong>❌ Error!</strong> Password lama tidak sesuai.
+                    </div>
+                `;
+                return;
+            }
+            
+            // Validate new password confirmation
+            if (passwordBaru !== konfirmasiPassword) {
+                resultDiv.innerHTML = `
+                    <div class="alert alert-error">
+                        <strong>❌ Error!</strong> Konfirmasi password tidak sesuai.
+                    </div>
+                `;
+                return;
+            }
+            
+            // Validate password length
+            if (passwordBaru.length < 4) {
+                resultDiv.innerHTML = `
+                    <div class="alert alert-error">
+                        <strong>❌ Error!</strong> Password baru minimal 4 karakter.
+                    </div>
+                `;
+                return;
+            }
+            
+            // Update password
+            const siswaIndex = dataSiswa.findIndex(s => s.nisn === nisn);
+            dataSiswa[siswaIndex].password = passwordBaru;
+            localStorage.setItem('dataSiswa', JSON.stringify(dataSiswa));
+            
+            resultDiv.innerHTML = `
+                <div class="alert alert-success">
+                    <strong>✅ Berhasil!</strong> Password berhasil diubah. Silakan login ulang dengan password baru.
+                </div>
+            `;
+            
+            // Clear form
+            document.getElementById('formGantiPassword').reset();
+            
+            // Auto close modal after 3 seconds
+            setTimeout(() => {
+                closeModal();
+                // Clear login form and results
+                document.getElementById('loginResult').innerHTML = '';
+                document.getElementById('formLogin').reset();
+            }, 3000);
+        }
+
         // Logout function
         function logoutGuru() {
             if (confirm('Yakin ingin logout dari portal guru?')) {
@@ -879,6 +1061,302 @@
             return false;
         }
 
+        // Tab switching for input methods
+        function switchInputTab(tab) {
+            // Update tab buttons
+            document.querySelectorAll('.input-tab').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add('active');
+            
+            // Show/hide content
+            if (tab === 'manual') {
+                document.getElementById('inputManual').classList.remove('hidden');
+                document.getElementById('inputFile').classList.add('hidden');
+            } else {
+                document.getElementById('inputManual').classList.add('hidden');
+                document.getElementById('inputFile').classList.remove('hidden');
+            }
+        }
+
+        // File import form handler
+        document.getElementById('formImportFile').addEventListener('submit', e => {
+            e.preventDefault();
+            
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                showImportAlert('Silakan pilih file terlebih dahulu!', 'error');
+                return;
+            }
+            
+            const fileName = file.name.toLowerCase();
+            
+            if (fileName.endsWith('.csv')) {
+                processCSVFile(file);
+            } else if (fileName.endsWith('.xlsx') || fileName.endsWith('.xls')) {
+                showImportAlert('File Excel akan diproses sebagai CSV. Pastikan format sesuai template.', 'success');
+                processCSVFile(file);
+            } else {
+                showImportAlert('Format file tidak didukung. Gunakan CSV atau Excel.', 'error');
+            }
+        });
+
+        // Process CSV file
+        function processCSVFile(file) {
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                const text = e.target.result;
+                const lines = text.split('\n').filter(line => line.trim());
+                
+                if (lines.length === 0) {
+                    showImportAlert('File kosong atau tidak valid!', 'error');
+                    return;
+                }
+                
+                let successCount = 0;
+                let errorCount = 0;
+                let errors = [];
+                
+                // Skip header if exists
+                const startIndex = lines[0].toLowerCase().includes('nama') ? 1 : 0;
+                
+                for (let i = startIndex; i < lines.length; i++) {
+                    const line = lines[i].trim();
+                    if (!line) continue;
+                    
+                    const columns = line.split(',').map(col => col.trim().replace(/"/g, ''));
+                    
+                    if (columns.length < 5) {
+                        errors.push(`Baris ${i + 1}: Format tidak lengkap (butuh 5 kolom)`);
+                        errorCount++;
+                        continue;
+                    }
+                    
+                    const [nama, nisn, kelas, password, linkNilai] = columns;
+                    
+                    // Validate data
+                    if (!nama || !nisn || !kelas || !password || !linkNilai) {
+                        errors.push(`Baris ${i + 1}: Ada kolom yang kosong`);
+                        errorCount++;
+                        continue;
+                    }
+                    
+                    if (!/^\d{10}$/.test(nisn)) {
+                        errors.push(`Baris ${i + 1}: NISN harus 10 digit angka (${nisn})`);
+                        errorCount++;
+                        continue;
+                    }
+                    
+                    if (dataSiswa.find(s => s.nisn === nisn)) {
+                        errors.push(`Baris ${i + 1}: NISN ${nisn} sudah terdaftar`);
+                        errorCount++;
+                        continue;
+                    }
+                    
+                    if (!linkNilai.startsWith('http')) {
+                        errors.push(`Baris ${i + 1}: Link nilai harus dimulai dengan http/https`);
+                        errorCount++;
+                        continue;
+                    }
+                    
+                    // Add student
+                    const siswa = {
+                        id: Date.now() + i,
+                        nama,
+                        nisn,
+                        kelas,
+                        password,
+                        linkNilai,
+                        tanggalDaftar: new Date().toLocaleDateString('id-ID')
+                    };
+                    
+                    dataSiswa.push(siswa);
+                    successCount++;
+                }
+                
+                // Save to localStorage
+                localStorage.setItem('dataSiswa', JSON.stringify(dataSiswa));
+                
+                // Show results
+                let resultHTML = `
+                    <div class="alert alert-success">
+                        <h4>📊 Hasil Import:</h4>
+                        <p><strong>✅ Berhasil:</strong> ${successCount} siswa</p>
+                        <p><strong>❌ Gagal:</strong> ${errorCount} baris</p>
+                    </div>
+                `;
+                
+                if (errors.length > 0) {
+                    resultHTML += `
+                        <div class="alert alert-error" style="margin-top: 1rem;">
+                            <h4>⚠️ Detail Error:</h4>
+                            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+                                ${errors.slice(0, 10).map(error => `<li>${error}</li>`).join('')}
+                                ${errors.length > 10 ? `<li>... dan ${errors.length - 10} error lainnya</li>` : ''}
+                            </ul>
+                        </div>
+                    `;
+                }
+                
+                document.getElementById('importResult').innerHTML = resultHTML;
+                
+                // Refresh student list
+                tampilkanDaftarSiswa();
+                
+                // Clear file input
+                document.getElementById('fileInput').value = '';
+            };
+            
+            reader.readAsText(file);
+        }
+
+        // Show import alert
+        function showImportAlert(message, type) {
+            document.getElementById('importResult').innerHTML = `
+                <div class="alert alert-${type}">
+                    ${message}
+                </div>
+            `;
+        }
+
+        // Download CSV template
+        function downloadTemplate() {
+            const csvContent = `Nama,NISN,Kelas,Password,LinkNilai
+Ahmad Budi,1234567890,X-1,password123,https://nilai.sekolah.com/ahmad
+Siti Aminah,1234567891,X-1,password456,https://nilai.sekolah.com/siti
+Budi Santoso,1234567892,X-2,password789,https://nilai.sekolah.com/budi`;
+            
+            // Check if browser supports download
+            const testLink = document.createElement('a');
+            const supportsDownload = 'download' in testLink;
+            
+            if (supportsDownload && typeof Blob !== 'undefined') {
+                try {
+                    // Create blob with BOM for better Excel compatibility
+                    const BOM = '\uFEFF';
+                    const blob = new Blob([BOM + csvContent], { 
+                        type: 'text/csv;charset=utf-8;' 
+                    });
+                    
+                    // Create download URL
+                    const url = URL.createObjectURL(blob);
+                    
+                    // Create and configure download link
+                    const downloadLink = document.createElement('a');
+                    downloadLink.href = url;
+                    downloadLink.download = 'template_data_siswa.csv';
+                    downloadLink.style.display = 'none';
+                    
+                    // Add to DOM, trigger click, then remove
+                    document.body.appendChild(downloadLink);
+                    downloadLink.click();
+                    
+                    // Clean up
+                    setTimeout(() => {
+                        document.body.removeChild(downloadLink);
+                        URL.revokeObjectURL(url);
+                    }, 100);
+                    
+                    showImportAlert('✅ Template CSV berhasil didownload!', 'success');
+                    return;
+                } catch (error) {
+                    console.log('Download failed, showing fallback modal');
+                }
+            }
+            
+            // Fallback: Show modal with copy option
+            showTemplateModal(csvContent);
+        }
+        
+        // Show template in modal for manual copy
+        function showTemplateModal(csvContent) {
+            const modal = document.createElement('div');
+            modal.className = 'modal';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <h3>📄 Template CSV</h3>
+                    <p>Download otomatis tidak tersedia. Salin konten berikut dan simpan sebagai file .csv:</p>
+                    
+                    <div style="margin: 1rem 0;">
+                        <label for="templateText" style="font-weight: bold; display: block; margin-bottom: 0.5rem;">
+                            Konten Template:
+                        </label>
+                        <textarea id="templateText" readonly 
+                                  style="width: 100%; height: 120px; padding: 0.8rem; border: 2px solid #dee2e6; 
+                                         border-radius: 8px; font-family: monospace; font-size: 0.9rem; 
+                                         background: #f8f9fa; resize: vertical;">${csvContent}</textarea>
+                    </div>
+                    
+                    <div style="background: #e3f2fd; padding: 1rem; border-radius: 8px; margin: 1rem 0; border-left: 4px solid #2196f3;">
+                        <h4 style="margin: 0 0 0.5rem 0; color: #1976d2;">💡 Cara Menggunakan:</h4>
+                        <ol style="margin: 0; padding-left: 1.5rem; color: #1565c0; font-size: 0.9rem;">
+                            <li>Klik "Salin Template" di bawah</li>
+                            <li>Buka aplikasi Excel atau text editor</li>
+                            <li>Paste (Ctrl+V) konten template</li>
+                            <li>Simpan sebagai file .csv</li>
+                            <li>Edit data sesuai kebutuhan</li>
+                        </ol>
+                    </div>
+                    
+                    <div style="margin-top: 1.5rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                        <button onclick="copyTemplateContent()" 
+                                style="background: #28a745; color: white; border: none; 
+                                       padding: 0.8rem 1.5rem; border-radius: 4px; cursor: pointer; 
+                                       font-weight: 600; flex: 1; min-width: 120px;">
+                            📋 Salin Template
+                        </button>
+                        <button onclick="selectAllTemplate()" 
+                                style="background: #007bff; color: white; border: none; 
+                                       padding: 0.8rem 1.5rem; border-radius: 4px; cursor: pointer; 
+                                       font-weight: 600;">
+                            🔍 Pilih Semua
+                        </button>
+                        <button onclick="closeModal()" 
+                                style="background: #6c757d; color: white; border: none; 
+                                       padding: 0.8rem 1.5rem; border-radius: 4px; cursor: pointer; 
+                                       font-weight: 600;">
+                            ❌ Tutup
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+        
+        // Select all text in template textarea
+        function selectAllTemplate() {
+            const textarea = document.getElementById('templateText');
+            if (textarea) {
+                textarea.select();
+                textarea.setSelectionRange(0, 99999); // For mobile devices
+                showImportAlert('📝 Teks template telah dipilih. Tekan Ctrl+C untuk menyalin.', 'success');
+            }
+        }
+        
+        // Copy template content to clipboard
+        function copyTemplateContent() {
+            const csvContent = `Nama,NISN,Kelas,Password,LinkNilai
+Ahmad Budi,1234567890,X-1,password123,https://nilai.sekolah.com/ahmad
+Siti Aminah,1234567891,X-1,password456,https://nilai.sekolah.com/siti
+Budi Santoso,1234567892,X-2,password789,https://nilai.sekolah.com/budi`;
+            
+            navigator.clipboard.writeText(csvContent).then(() => {
+                showImportAlert('Template berhasil disalin ke clipboard!', 'success');
+                closeModal();
+            }).catch(() => {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = csvContent;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showImportAlert('Template berhasil disalin!', 'success');
+                closeModal();
+            });
+        }
+
         // Initialize
         tampilkanDaftarSiswa();
         updateStatistik();
@@ -889,5 +1367,5 @@
             document.getElementById('welcomeGuru').textContent = `Selamat datang, ${JSON.parse(sessionStorage.getItem('guruLogin')).nama}`;
         }
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9935fffc82129fbc',t:'MTc2MTI3MjQ3OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99361bbfb68bdf69',t:'MTc2MTI3MzYxNS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
