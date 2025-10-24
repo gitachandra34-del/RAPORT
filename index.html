@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Sekolah Terpadu</title>
+    <style>
+        body {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 0;
+            color: #333;
+            min-height: 100%;
+        }
+        
+        html, body {
+            height: 100%;
+        }
+        
+        header {
+            text-align: center;
+            background: rgba(0, 74, 173, 0.95);
+            color: #fff;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        header h1 {
+            margin: 0;
+            font-size: 2.2rem;
+            font-weight: 600;
+        }
+        
+        main {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 3rem auto;
+            gap: 2rem;
+            max-width: 800px;
+            padding: 0 1rem;
+        }
+        
+        .portal-btn {
+            padding: 2rem 3rem;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.4rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            min-width: 200px;
+            text-align: center;
+        }
+        
+        .portal-btn.guru {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: #fff;
+        }
+        
+        .portal-btn.siswa {
+            background: linear-gradient(135deg, #28a745, #1e7e34);
+            color: #fff;
+        }
+        
+        .portal-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.2);
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        section {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .card {
+            background: #fff;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            margin-bottom: 1rem;
+        }
+        
+        nav {
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        
+        nav button {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            background: #e9ecef;
+            color: #495057;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        nav button.active {
+            background: #004aad;
+            color: #fff;
+        }
+        
+        nav button:hover:not(.active) {
+            background: #dee2e6;
+        }
+        
+        form {
+            background: #fff;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        form input, form select {
+            display: block;
+            margin: 1rem 0;
+            padding: 0.8rem;
+            width: 100%;
+            max-width: 400px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        
+        form input:focus, form select:focus {
+            outline: none;
+            border-color: #004aad;
+        }
+        
+        form button {
+            background: linear-gradient(135deg, #004aad, #0056b3);
+            color: #fff;
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        form button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,74,173,0.3);
+        }
+        
+        .siswa-item {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border-left: 4px solid #28a745;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .siswa-info h4 {
+            margin: 0 0 0.5rem 0;
+            color: #004aad;
+            font-size: 1.1rem;
+        }
+        
+        .siswa-info p {
+            margin: 0.2rem 0;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .siswa-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .btn-small {
+            padding: 0.4rem 0.8rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-edit {
+            background: #ffc107;
+            color: #000;
+        }
+        
+        .btn-delete {
+            background: #dc3545;
+            color: #fff;
+        }
+        
+        .btn-small:hover {
+            opacity: 0.8;
+        }
+        
+        .back-btn {
+            background: #6c757d;
+            color: #fff;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .back-btn:hover {
+            background: #5a6268;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: #fff;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+        
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80%;
+            overflow-y: auto;
+        }
+        
+        .link-box {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 2px dashed #dee2e6;
+            margin: 1rem 0;
+            word-break: break-all;
+            font-family: monospace;
+        }
+        
+        .copy-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 0.5rem;
+        }
+        
+        @media (max-width: 768px) {
+            main {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .portal-btn {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .siswa-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🏫 Portal Sekolah Terpadu</h1>
+        <p style="margin: 0.5rem 0 0 0; opacity: 0.9;">Sistem Manajemen Guru & Siswa</p>
+    </header>
+
+    <main id="portal-selection">
+        <button id="btnGuru" class="portal-btn guru">👨‍🏫 Portal Guru</button>
+        <button id="btnSiswa" class="portal-btn siswa">🎓 Portal Siswa</button>
+    </main>
+
+    <section id="loginGuru" class="hidden">
+        <button class="back-btn" onclick="kembaliKePortal()">← Kembali ke Portal</button>
+        
+        <div class="card">
+            <h2>🔐 Login Portal Guru</h2>
+            <p>Masukkan kredensial guru untuk mengakses sistem manajemen siswa</p>
+            <form id="formLoginGuru">
+                <input type="text" id="usernameGuru" placeholder="Username Guru" required>
+                <input type="password" id="passwordGuru" placeholder="Password" required>
+                <button type="submit">🚪 Masuk ke Portal Guru</button>
+            </form>
+            <div id="loginGuruResult"></div>
+            
+            <div style="margin-top: 2rem; padding: 1rem; background: #e3f2fd; border-radius: 8px; border-left: 4px solid #2196f3;">
+                <h4 style="margin: 0 0 0.5rem 0; color: #1976d2;">💡 Akun Demo:</h4>
+                <p style="margin: 0; font-size: 0.9rem; color: #1565c0;">
+                    <strong>Username:</strong> admin<br>
+                    <strong>Password:</strong> guru123
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section id="portalGuru" class="hidden">
+        <button class="back-btn" onclick="kembaliKePortal()">← Kembali ke Portal</button>
+        
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding: 1rem; background: rgba(255,255,255,0.1); border-radius: 8px;">
+            <span id="welcomeGuru" style="color: white; font-weight: 600;"></span>
+            <button onclick="logoutGuru()" style="background: #dc3545; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer;">
+                🚪 Logout
+            </button>
+        </div>
+        
+        <nav>
+            <button data-tab="kelola" class="active">📚 Kelola Siswa</button>
+            <button data-tab="link">🔗 Link Orang Tua</button>
+            <button data-tab="statistik">📊 Statistik</button>
+        </nav>
+
+        <div id="tabKelola" class="tab-content">
+            <div class="card">
+                <h2>📝 Tambah Data Siswa Baru</h2>
+                <form id="formTambahSiswa">
+                    <input type="text" id="nama" placeholder="Nama Lengkap Siswa" required>
+                    <input type="text" id="nisn" placeholder="NISN (10 digit)" maxlength="10" pattern="[0-9]{10}" required>
+                    <select id="kelas" required>
+                        <option value="">Pilih Kelas</option>
+                        <option>X-1</option>
+                        <option>X-2</option>
+                        <option>X-3</option>
+                        <option>X-4</option>
+                        <option>X-5</option>
+                        <option>X-6</option>
+                        <option>X-7</option>
+                        <option>X-8</option>
+                        <option>X-9</option>
+                        <option>X-10</option>
+                        <option>X-11</option>
+                        <option>X-12</option>
+                        <option>XI-1</option>
+                        <option>XI-2</option>
+                        <option>XI-3</option>
+                        <option>XI-4</option>
+                        <option>XI-5</option>
+                        <option>XI-6</option>
+                        <option>XI-7</option>
+                        <option>XI-8</option>
+                        <option>XI-9</option>
+                        <option>XI-10</option>
+                        <option>XI-11</option>
+                        <option>XI-12</option>
+                        <option>XII-1</option>
+                        <option>XII-2</option>
+                        <option>XII-3</option>
+                        <option>XII-4</option>
+                        <option>XII-5</option>
+                        <option>XII-6</option>
+                        <option>XII-7</option>
+                        <option>XII-8</option>
+                        <option>XII-9</option>
+                        <option>XII-10</option>
+                        <option>XII-11</option>
+                        <option>XII-12</option>
+                    </select>
+                    <input type="password" id="password" placeholder="Password Login untuk Orang Tua" required>
+                    <input type="url" id="linkNilai" placeholder="Link Halaman Nilai (https://...)" required>
+                    <button type="submit">➕ Tambah Siswa</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h2>👥 Daftar Siswa Terdaftar</h2>
+                <div id="daftarSiswa"></div>
+            </div>
+        </div>
+
+        <div id="tabLink" class="tab-content hidden">
+            <div class="card">
+                <h2>🔗 Kelola Link Akses Orang Tua</h2>
+                <p>Bagikan link berikut kepada orang tua siswa untuk mengakses portal:</p>
+                
+                <div class="link-box">
+                    <strong>Link Portal Siswa:</strong><br>
+                    <span id="portalLink"></span>
+                    <button class="copy-btn" onclick="copyPortalLink()">📋 Salin</button>
+                </div>
+                
+                <h3>📱 Link Individual per Siswa</h3>
+                <div id="daftarLinkSiswa"></div>
+            </div>
+        </div>
+
+        <div id="tabStatistik" class="tab-content hidden">
+            <div class="card">
+                <h2>📊 Statistik Sekolah</h2>
+                <div id="dashboard" class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalSiswa">0</div>
+                        <div>Total Siswa</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalKelas">0</div>
+                        <div>Kelas Aktif</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="loginHariIni">0</div>
+                        <div>Login Hari Ini</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="portalSiswa" class="hidden">
+        <button class="back-btn" onclick="kembaliKePortal()">← Kembali ke Portal</button>
+        
+        <div class="card">
+            <h2>🔐 Login Orang Tua/Wali</h2>
+            <form id="formLogin">
+                <input type="text" id="loginNISN" placeholder="NISN Siswa (10 digit)" maxlength="10" pattern="[0-9]{10}" required>
+                <input type="password" id="loginPassword" placeholder="Password" required>
+                <button type="submit">🚪 Masuk</button>
+            </form>
+            <div id="loginResult"></div>
+        </div>
+    </section>
+
+    <script>
+        // Data storage
+        let dataSiswa = JSON.parse(localStorage.getItem('dataSiswa')) || [];
+        let loginStats = JSON.parse(localStorage.getItem('loginStats')) || {};
+
+        // DOM elements
+        const btnGuru = document.getElementById('btnGuru');
+        const btnSiswa = document.getElementById('btnSiswa');
+        const portalGuru = document.getElementById('portalGuru');
+        const portalSiswa = document.getElementById('portalSiswa');
+        const portalSelection = document.getElementById('portal-selection');
+        const formTambahSiswa = document.getElementById('formTambahSiswa');
+        const daftarSiswa = document.getElementById('daftarSiswa');
+        const formLogin = document.getElementById('formLogin');
+        const formLoginGuru = document.getElementById('formLoginGuru');
+
+        // Portal navigation
+        btnGuru.onclick = () => {
+            portalSelection.classList.add('hidden');
+            document.getElementById('loginGuru').classList.remove('hidden');
+        };
+
+        btnSiswa.onclick = () => {
+            portalSelection.classList.add('hidden');
+            portalSiswa.classList.remove('hidden');
+        };
+
+        function kembaliKePortal() {
+            portalGuru.classList.add('hidden');
+            portalSiswa.classList.add('hidden');
+            document.getElementById('loginGuru').classList.add('hidden');
+            portalSelection.classList.remove('hidden');
+            
+            // Clear login results
+            document.getElementById('loginResult').innerHTML = '';
+            const loginGuruResult = document.getElementById('loginGuruResult');
+            if (loginGuruResult) loginGuruResult.innerHTML = '';
+        }
+
+        // Tab navigation
+        document.querySelectorAll('nav button').forEach(btn => {
+            btn.onclick = () => {
+                const tab = btn.dataset.tab;
+                
+                // Update active button
+                document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                // Show/hide content
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.add('hidden');
+                });
+                document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.remove('hidden');
+                
+                if (tab === 'statistik') {
+                    updateStatistik();
+                } else if (tab === 'link') {
+                    updateLinkManagement();
+                }
+            };
+        });
+
+        // Add student form
+        formTambahSiswa.addEventListener('submit', e => {
+            e.preventDefault();
+            
+            const nama = document.getElementById('nama').value;
+            const nisn = document.getElementById('nisn').value;
+            const kelas = document.getElementById('kelas').value;
+            const password = document.getElementById('password').value;
+            const linkNilai = document.getElementById('linkNilai').value;
+
+            // Validate NISN uniqueness
+            if (dataSiswa.find(s => s.nisn === nisn)) {
+                showAlert('NISN sudah terdaftar!', 'error');
+                return;
+            }
+
+            // Validate NISN format
+            if (!/^\d{10}$/.test(nisn)) {
+                showAlert('NISN harus berupa 10 digit angka!', 'error');
+                return;
+            }
+
+            const siswa = {
+                id: Date.now(),
+                nama,
+                nisn,
+                kelas,
+                password,
+                linkNilai,
+                tanggalDaftar: new Date().toLocaleDateString('id-ID')
+            };
+
+            dataSiswa.push(siswa);
+            localStorage.setItem('dataSiswa', JSON.stringify(dataSiswa));
+            
+            showAlert('Siswa berhasil ditambahkan!', 'success');
+            formTambahSiswa.reset();
+            tampilkanDaftarSiswa();
+        });
+
+        // Display student list
+        function tampilkanDaftarSiswa() {
+            if (dataSiswa.length === 0) {
+                daftarSiswa.innerHTML = '<p style="text-align: center; color: #666; padding: 2rem;">Belum ada siswa terdaftar</p>';
+                return;
+            }
+
+            daftarSiswa.innerHTML = dataSiswa.map(siswa => `
+                <div class="siswa-item">
+                    <div class="siswa-info">
+                        <h4>👤 ${siswa.nama}</h4>
+                        <p><strong>NISN:</strong> ${siswa.nisn}</p>
+                        <p><strong>Kelas:</strong> ${siswa.kelas}</p>
+                        <p><strong>Terdaftar:</strong> ${siswa.tanggalDaftar}</p>
+                    </div>
+                    <div class="siswa-actions">
+                        <button class="btn-small btn-edit" onclick="editSiswa(${siswa.id})">✏️ Edit</button>
+                        <button class="btn-small btn-delete" onclick="hapusSiswa(${siswa.id})">🗑️ Hapus</button>
+                        <button class="btn-small" style="background: #17a2b8; color: white;" onclick="buatLinkOrtu('${siswa.nisn}')">🔗 Link Ortu</button>
+                        <a href="${siswa.linkNilai}" target="_blank" rel="noopener noreferrer" class="btn-small" style="background: #28a745; color: white; text-decoration: none; display: inline-block;">📊 Nilai</a>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Delete student
+        function hapusSiswa(id) {
+            const siswa = dataSiswa.find(s => s.id === id);
+            if (confirm(`Yakin ingin menghapus data ${siswa.nama}?`)) {
+                dataSiswa = dataSiswa.filter(s => s.id !== id);
+                localStorage.setItem('dataSiswa', JSON.stringify(dataSiswa));
+                tampilkanDaftarSiswa();
+                showAlert('Data siswa berhasil dihapus!', 'success');
+            }
+        }
+
+        // Edit student (simplified - just show current data)
+        function editSiswa(id) {
+            const siswa = dataSiswa.find(s => s.id === id);
+            if (siswa) {
+                document.getElementById('nama').value = siswa.nama;
+                document.getElementById('nisn').value = siswa.nisn;
+                document.getElementById('kelas').value = siswa.kelas;
+                document.getElementById('password').value = siswa.password;
+                document.getElementById('linkNilai').value = siswa.linkNilai;
+                
+                // Remove the student temporarily for editing
+                dataSiswa = dataSiswa.filter(s => s.id !== id);
+                localStorage.setItem('dataSiswa', JSON.stringify(dataSiswa));
+                tampilkanDaftarSiswa();
+                
+                showAlert('Data dimuat untuk diedit. Silakan ubah dan simpan kembali.', 'success');
+            }
+        }
+
+        // Teacher login form
+        formLoginGuru.addEventListener('submit', e => {
+            e.preventDefault();
+            
+            const username = document.getElementById('usernameGuru').value;
+            const password = document.getElementById('passwordGuru').value;
+            
+            // Default teacher credentials (in real app, this would be from database)
+            const validCredentials = [
+                { username: 'admin', password: 'guru123', nama: 'Administrator' },
+                { username: 'guru1', password: 'password123', nama: 'Guru Utama' },
+                { username: 'kepala', password: 'kepala123', nama: 'Kepala Sekolah' }
+            ];
+            
+            const guru = validCredentials.find(g => g.username === username && g.password === password);
+            
+            if (guru) {
+                // Store login session
+                sessionStorage.setItem('guruLogin', JSON.stringify({
+                    username: guru.username,
+                    nama: guru.nama,
+                    loginTime: new Date().toISOString()
+                }));
+                
+                // Navigate to teacher portal
+                document.getElementById('loginGuru').classList.add('hidden');
+                portalGuru.classList.remove('hidden');
+                updateStatistik();
+                
+                showAlert(`Selamat datang, ${guru.nama}!`, 'success');
+                formLoginGuru.reset();
+            } else {
+                document.getElementById('loginGuruResult').innerHTML = `
+                    <div class="alert alert-error">
+                        <h3>❌ Login Gagal!</h3>
+                        <p>Username atau password tidak valid. Silakan coba lagi.</p>
+                    </div>
+                `;
+            }
+        });
+
+        // Check URL parameters for auto-fill
+        function checkURLParams() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const nisn = urlParams.get('nisn');
+            
+            if (nisn && portalSiswa.classList.contains('hidden')) {
+                // Auto-navigate to student portal if NISN in URL
+                btnSiswa.click();
+                document.getElementById('loginNISN').value = nisn;
+                document.getElementById('loginNISN').focus();
+            }
+        }
+
+        // Student/Parent login
+        formLogin.addEventListener('submit', e => {
+            e.preventDefault();
+            
+            const nisn = document.getElementById('loginNISN').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            const siswa = dataSiswa.find(s => s.nisn === nisn && s.password === password);
+            
+            if (siswa) {
+                // Record login
+                const today = new Date().toDateString();
+                if (!loginStats[today]) loginStats[today] = 0;
+                loginStats[today]++;
+                localStorage.setItem('loginStats', JSON.stringify(loginStats));
+                
+                document.getElementById('loginResult').innerHTML = `
+                    <div class="alert alert-success">
+                        <h3>✅ Login Berhasil!</h3>
+                        <p><strong>Selamat datang, Orang Tua/Wali</strong></p>
+                        <hr style="margin: 1rem 0;">
+                        <h4>📋 Informasi Siswa:</h4>
+                        <p><strong>Nama:</strong> ${siswa.nama}</p>
+                        <p><strong>NISN:</strong> ${siswa.nisn}</p>
+                        <p><strong>Kelas:</strong> ${siswa.kelas}</p>
+                        <hr style="margin: 1rem 0;">
+                        <a href="${siswa.linkNilai}" target="_blank" rel="noopener noreferrer" 
+                           style="display: inline-block; background: #28a745; color: white; padding: 0.8rem 1.5rem; 
+                                  text-decoration: none; border-radius: 8px; margin-top: 1rem;">
+                            📊 Lihat Nilai Siswa
+                        </a>
+                    </div>
+                `;
+                formLogin.reset();
+            } else {
+                document.getElementById('loginResult').innerHTML = `
+                    <div class="alert alert-error">
+                        <h3>❌ Login Gagal!</h3>
+                        <p>NISN atau password tidak valid. Silakan periksa kembali atau hubungi guru.</p>
+                    </div>
+                `;
+            }
+        });
+
+        // Update statistics
+        function updateStatistik() {
+            const totalSiswa = dataSiswa.length;
+            const kelasUnik = [...new Set(dataSiswa.map(s => s.kelas))].length;
+            const today = new Date().toDateString();
+            const loginHariIni = loginStats[today] || 0;
+            
+            document.getElementById('totalSiswa').textContent = totalSiswa;
+            document.getElementById('totalKelas').textContent = kelasUnik;
+            document.getElementById('loginHariIni').textContent = loginHariIni;
+        }
+
+        // Show alert messages
+        function showAlert(message, type) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.textContent = message;
+            
+            const form = document.getElementById('formTambahSiswa');
+            form.parentNode.insertBefore(alertDiv, form);
+            
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 5000);
+        }
+
+        // Link management functions
+        function updateLinkManagement() {
+            const currentURL = window.location.origin + window.location.pathname;
+            document.getElementById('portalLink').textContent = currentURL + '?portal=siswa';
+            
+            const daftarLinkSiswa = document.getElementById('daftarLinkSiswa');
+            if (dataSiswa.length === 0) {
+                daftarLinkSiswa.innerHTML = '<p style="text-align: center; color: #666; padding: 2rem;">Belum ada siswa terdaftar</p>';
+                return;
+            }
+            
+            daftarLinkSiswa.innerHTML = dataSiswa.map(siswa => `
+                <div class="siswa-item">
+                    <div class="siswa-info">
+                        <h4>👤 ${siswa.nama} (${siswa.kelas})</h4>
+                        <p><strong>NISN:</strong> ${siswa.nisn}</p>
+                        <div class="link-box" style="margin-top: 0.5rem;">
+                            <small><strong>Link Khusus:</strong></small><br>
+                            <span style="font-size: 0.9rem;">${currentURL}?nisn=${siswa.nisn}</span>
+                        </div>
+                    </div>
+                    <div class="siswa-actions">
+                        <button class="btn-small copy-btn" onclick="copyStudentLink('${siswa.nisn}')">📋 Salin Link</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function buatLinkOrtu(nisn) {
+            const currentURL = window.location.origin + window.location.pathname;
+            const linkKhusus = currentURL + '?nisn=' + nisn;
+            const siswa = dataSiswa.find(s => s.nisn === nisn);
+            
+            const modal = document.createElement('div');
+            modal.className = 'modal';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <h3>🔗 Link Akses untuk Orang Tua</h3>
+                    <p><strong>Siswa:</strong> ${siswa.nama} (${siswa.kelas})</p>
+                    
+                    <div class="link-box">
+                        <strong>Link Khusus:</strong><br>
+                        <span id="linkKhusus">${linkKhusus}</span>
+                        <button class="copy-btn" onclick="copyText('${linkKhusus}')">📋 Salin</button>
+                    </div>
+                    
+                    <p><small>💡 Link ini akan otomatis mengisi NISN saat dibuka</small></p>
+                    
+                    <div style="margin-top: 1rem;">
+                        <button onclick="closeModal()" style="background: #6c757d; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px;">
+                            Tutup
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+        }
+        
+        function copyPortalLink() {
+            const link = document.getElementById('portalLink').textContent;
+            copyText(link);
+        }
+        
+        function copyStudentLink(nisn) {
+            const currentURL = window.location.origin + window.location.pathname;
+            const link = currentURL + '?nisn=' + nisn;
+            copyText(link);
+        }
+        
+        function copyText(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                showAlert('Link berhasil disalin ke clipboard!', 'success');
+            }).catch(() => {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showAlert('Link berhasil disalin!', 'success');
+            });
+        }
+        
+
+        
+        function closeModal() {
+            const modal = document.querySelector('.modal');
+            if (modal) {
+                modal.remove();
+            }
+        }
+
+        // Logout function
+        function logoutGuru() {
+            if (confirm('Yakin ingin logout dari portal guru?')) {
+                sessionStorage.removeItem('guruLogin');
+                kembaliKePortal();
+                showAlert('Berhasil logout dari portal guru', 'success');
+            }
+        }
+
+        // Check teacher session
+        function checkGuruSession() {
+            const guruSession = sessionStorage.getItem('guruLogin');
+            if (guruSession) {
+                const guru = JSON.parse(guruSession);
+                document.getElementById('welcomeGuru').textContent = `Selamat datang, ${guru.nama}`;
+                return true;
+            }
+            return false;
+        }
+
+        // Initialize
+        tampilkanDaftarSiswa();
+        updateStatistik();
+        checkURLParams();
+        
+        // Check if teacher is already logged in
+        if (checkGuruSession()) {
+            document.getElementById('welcomeGuru').textContent = `Selamat datang, ${JSON.parse(sessionStorage.getItem('guruLogin')).nama}`;
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9935fffc82129fbc',t:'MTc2MTI3MjQ3OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
